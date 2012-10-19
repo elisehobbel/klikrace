@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">KlikRace</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_klik_race">KlikRaceActivity</string>
+    <string name="klik">klik</string>
+
+</resources>
