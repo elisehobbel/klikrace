@@ -12,7 +12,7 @@ public class RenbaanTest {
 	public void test() {
 		Renbaan renbaan = new Renbaan(300, 100, 20, 30);
 		
-		assertEquals(20, renbaan.getStraal(RenBaanBaan.OMTREK),delta);
+		assertEquals(90, renbaan.getStraal(RenBaanBaan.OMTREK),delta);
 		
 	}
 
