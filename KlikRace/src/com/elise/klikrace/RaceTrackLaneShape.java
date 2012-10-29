@@ -3,7 +3,7 @@ package com.elise.klikrace;
 
 
 
-public enum RenBaanBaan {
+public enum RaceTrackLaneShape {
 	
 
 	OMTREK(0.0F), BUITENBAAN(0.5F ), MIDDENBAAN(1.5F),BINNENBAAN(2.5F);
@@ -12,7 +12,7 @@ public enum RenBaanBaan {
 
 
 	
-	private RenBaanBaan(float correctie){
+	private RaceTrackLaneShape(float correctie){
 		this.correctie = correctie;
 
 	}

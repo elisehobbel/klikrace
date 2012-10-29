@@ -4,28 +4,28 @@ package com.elise.klikrace;
 
 
 
-public class Renbaan  {
+public class RaceTrackShape  {
 
 
 	private int breedte;
 	private int hoogte;
     private int binnenStraal;
-	private int baanBreedte;
+	private int laneWidth;
 	
 	
-	public Renbaan(int breedte, int hoogte) {
+	public RaceTrackShape(int breedte, int hoogte) {
 		int defaultBaanBreedte = 20;
 		int defaultStraal = 20;	
 		init(breedte, hoogte, defaultBaanBreedte, defaultStraal);
 	}
 	
-	public Renbaan(int breedte, int hoogte, int baanbreedte, int binnenStraal) {	
+	public RaceTrackShape(int breedte, int hoogte, int baanbreedte, int binnenStraal) {	
 		init( breedte,  hoogte,  baanbreedte,  binnenStraal);
 	}
 
 
 	
-	public Renbaan() {
+	public RaceTrackShape() {
 		init(100,100,10,10);//TODO how to solve this?
 	}
 
@@ -33,7 +33,7 @@ public class Renbaan  {
 			int binnenStraal) {
 		this.breedte = breedte;
 		this.hoogte = hoogte;
-		this.baanBreedte = baanBreedte;
+		this.laneWidth = baanBreedte;
 		this.binnenStraal = binnenStraal;
 
 		
@@ -63,12 +63,12 @@ public class Renbaan  {
 	}
 
 	public void setBaanBreedte(int baanBreedte) {
-		this.baanBreedte = baanBreedte;	
+		this.laneWidth = baanBreedte;	
 	}
 
 	
 	
-    public float getX(float percentage,  RenBaanBaan baan){
+    public float getX(float percentage,  RaceTrackLaneShape baan){
     	
 	  if(percentage < 0 || percentage > 100){
 		  percentage = 0;
@@ -95,7 +95,7 @@ public class Renbaan  {
     }
 
     
-public float getY(float percentage, RenBaanBaan baan) {
+public float getY(float percentage, RaceTrackLaneShape baan) {
 		
 	  if(percentage < 0 || percentage > 100){
 		  //TODO solve
@@ -121,7 +121,7 @@ public float getY(float percentage, RenBaanBaan baan) {
 
 	
 	//returns the x to be added to the middel percentage shouldbe  < 25
-	private double getXinQuandrant(double percentage, RenBaanBaan baan) {
+	private double getXinQuandrant(double percentage, RaceTrackLaneShape baan) {
 		if(percentage > 25){
 			throw new RuntimeException("percentage  >  25 % should not happen!");
 		}
@@ -133,7 +133,7 @@ public float getY(float percentage, RenBaanBaan baan) {
 		double breedte = getQuadrantBreedte(baan);
 		
 		
-		double straal = baan.getStraal(binnenStraal, baanBreedte);		
+		double straal = baan.getStraal(binnenStraal, laneWidth);		
 		
 		double horizontaal = breedte/2 - straal;
 		double verticaal = hoogte/2 - straal;
@@ -157,7 +157,7 @@ public float getY(float percentage, RenBaanBaan baan) {
 		return result;
 	}
 	
-	public double getYInQuadrant(double percentage, RenBaanBaan baan){
+	public double getYInQuadrant(double percentage, RaceTrackLaneShape baan){
 		if(percentage > 25){
 			throw new RuntimeException("percentage  >  25 % should not happen!");
 		}
@@ -167,7 +167,7 @@ public float getY(float percentage, RenBaanBaan baan) {
 		
 		double hoogte = getQuadrantHoogte(baan);
 		double breedte = getQuadrantBreedte(baan);
-		double straal = baan.getStraal(binnenStraal, baanBreedte);
+		double straal = baan.getStraal(binnenStraal, laneWidth);
 				
 		double horizontaal = breedte/2 - straal;
 		double verticaal = hoogte/2 - straal;
@@ -190,23 +190,23 @@ public float getY(float percentage, RenBaanBaan baan) {
 		return result;
 	}
 	
-	public float getQuadrantHoogte(RenBaanBaan baan) {
+	public float getQuadrantHoogte(RaceTrackLaneShape baan) {
 		return getQuadrant(this.hoogte, baan);
 	}
 
-	private float getQuadrant(int size, RenBaanBaan baan) {	
-		return  size - 2 * baan.getCorrectie() * baanBreedte;
+	private float getQuadrant(int size, RaceTrackLaneShape baan) {	
+		return  size - 2 * baan.getCorrectie() * laneWidth;
 	}
 
-	public float getQuadrantBreedte(RenBaanBaan baan) {
+	public float getQuadrantBreedte(RaceTrackLaneShape baan) {
 		return getQuadrant(this.breedte, baan);
 	}
 	
 	
 
-	public float getTotaleAfstand(RenBaanBaan baan) {
+	public float getTotaleAfstand(RaceTrackLaneShape baan) {
 		 
-		float baanStraal =  baan.getStraal(binnenStraal, baanBreedte);
+		float baanStraal =  baan.getStraal(binnenStraal, laneWidth);
 		float lengteHorizontaal = getQuadrantBreedte(baan) - 2 * baanStraal;
 		float lengteVerticaal =  getQuadrantHoogte(baan) - 2 * baanStraal ;
 		float lengteBochten = (float) (Math.PI * 2 * baanStraal);
@@ -214,8 +214,8 @@ public float getY(float percentage, RenBaanBaan baan) {
 		return lengteBochten + 2 * lengteHorizontaal + 2 * lengteVerticaal;
 	}
 
-	public float getStraal(RenBaanBaan baan) {
-		float straal = baan.getStraal(binnenStraal, baanBreedte);
+	public float getStraal(RaceTrackLaneShape baan) {
+		float straal = baan.getStraal(binnenStraal, laneWidth);
 		return straal;
 	}
 
@@ -223,8 +223,8 @@ public float getY(float percentage, RenBaanBaan baan) {
 		binnenStraal = straal;	
 	}
 
-	public int getBaanBreedte() {
-		return baanBreedte;
+	public int getLaneWidth() {
+		return laneWidth;
 	}
 
 

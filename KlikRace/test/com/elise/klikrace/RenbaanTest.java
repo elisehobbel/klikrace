@@ -10,9 +10,9 @@ public class RenbaanTest {
 	
 	@Test
 	public void test() {
-		Renbaan renbaan = new Renbaan(300, 100, 20, 30);
+		RaceTrackShape renbaan = new RaceTrackShape(300, 100, 20, 30);
 		
-		assertEquals(90, renbaan.getStraal(RenBaanBaan.OMTREK),delta);
+		assertEquals(90, renbaan.getStraal(RaceTrackLaneShape.OMTREK),delta);
 		
 	}
 

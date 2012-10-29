@@ -3,6 +3,7 @@ package com.elise.klikrace;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,42 +18,55 @@ import android.view.View;
 public class RaceTrackView extends View {
 	
 	private Rect backgroundRect;
-	private Renbaan renbaan;
-	private Runner opponent1;
-	private Runner opponent2;
+	private RaceTrackShape renbaan;
+	
+	private RaceScore raceScoreOpponent1;
+	private RaceScore raceScoreOpponent2;
+	
 	private long raceStartTime;
 	private Runner player;
 	private long sumStartTime;
 
-	private Score playerScore;
 	private float percentagePlayer;
 	
-	private Som currentSom;
-	private Race currentRace;
+	private RaceTrack currentRace;
+	private RaceScore playerRaceScore;
+	private Sum currentSom;
+	private boolean started = false;
 	
 	
 	public RaceTrackView(Context context) {
 		
 		super(context);
 		backgroundRect = new Rect(0,0,0,0);
-		renbaan = new Renbaan();
+		renbaan = new RaceTrackShape();
 		renbaan.setBaanBreedte(20);
 		renbaan.setBinnenStraal(80);
-		raceStartTime = System.currentTimeMillis();
 		
 		
 		
-		ArrayList<Som> sommen = new ArrayList<Som>();
-		sommen.add(new Som("1+8"));
-		sommen.add(new Som("4+3"));
-		sommen.add(new Som("2+3"));
+		ArrayList<Sum> sommen = new ArrayList<Sum>();
+		sommen.add(new Sum("1+8"));
+		sommen.add(new Sum("4+3"));
+		sommen.add(new Sum("2+3"));
 		
 		
+		currentRace = new RaceTrack(sommen);
+		playerRaceScore = new RaceScore(currentRace, player);
 		
-		currentRace = new Race(sommen);
+		Runner opponent1 = new Runner("opponent1");		
+		Runner opponent2 = new Runner("opponent2");
 		
-		opponent1 = new Runner("opponent1");		
-		opponent2 = new Runner("opponent2");
+		raceScoreOpponent1 = new RaceScore(currentRace, opponent1);
+		raceScoreOpponent1.addScore(currentRace.getSommen().get(0), 3333);
+		raceScoreOpponent1.addScore(currentRace.getSommen().get(1), 3333);
+		raceScoreOpponent1.addScore(currentRace.getSommen().get(2), 3333);
+		
+		
+		raceScoreOpponent2 = new RaceScore(currentRace, opponent2);
+		raceScoreOpponent2.addScore(currentRace.getSommen().get(0), 4444);
+		raceScoreOpponent2.addScore(currentRace.getSommen().get(1), 3333);
+		raceScoreOpponent2.addScore(currentRace.getSommen().get(2), 1111);
 		
 			
 		player = new Runner( "player");
@@ -73,11 +87,14 @@ public class RaceTrackView extends View {
 		renbaan.setWidth(canvas.getWidth());
 		renbaan.setHeight(getScreenHeight());
 		
-	
+		if(started){
 		drawPlayer(canvas);
 		
 		drawOpponent1(canvas);
 		drawOpponent2(canvas);
+		
+		
+		}
 		
 		invalidate();
 		
@@ -96,12 +113,12 @@ public class RaceTrackView extends View {
 		white.setStyle(Style.STROKE);
 		
 		
-		float straal = renbaan.getStraal(RenBaanBaan.OMTREK);
+		float straal = renbaan.getStraal(RaceTrackLaneShape.OMTREK);
 		System.out.println("straal:" + straal);
 		canvas.drawRoundRect(rect, straal , straal, grey);
 		canvas.drawRoundRect(rect, straal, straal, white);
 		
-		int baanBreedte = renbaan.getBaanBreedte();
+		int baanBreedte = renbaan.getLaneWidth();
 		rect.set(baanBreedte, baanBreedte, renbaan.getBreedte() - baanBreedte, renbaan.getHoogte()-baanBreedte);
 		
 		canvas.drawRoundRect(rect, straal - baanBreedte, straal - baanBreedte, white);
@@ -117,28 +134,25 @@ public class RaceTrackView extends View {
 	}
 
 	private void drawOpponent1(Canvas canvas) {
-	
-	
-		int color = Color.RED;
-		
-		drawOpponent(canvas, opponent1, color, RenBaanBaan.BUITENBAAN);
-		
+		int color = Color.RED;	
+		drawOpponent(canvas, raceScoreOpponent1, color, RaceTrackLaneShape.BUITENBAAN);	
 	}
 	
 	private void drawOpponent2(Canvas canvas) {
-
 		int color = Color.GREEN;
 		
-		drawOpponent(canvas, opponent2, color, RenBaanBaan.BINNENBAAN);
-		
+		drawOpponent(canvas, raceScoreOpponent2, color, RaceTrackLaneShape.BINNENBAAN);
 	}
+	
+	
 
-	private void drawOpponent(Canvas canvas, Runner runner, int color, RenBaanBaan baan) {
+	private void drawOpponent(Canvas canvas, RaceScore raceScore, int color, RaceTrackLaneShape baan) {
+		
 		long duration = System.currentTimeMillis() - raceStartTime;		
 		
-		float percentageOpponent = runner.getTrackPercentage((int) duration, currentRace);
+		float percentageOpponent = raceScore.getTrackPercentage((int) duration);
 		
-		Log.d("drawOpponent "+ runner.getName(), "time: " + duration + " percentage: " + percentageOpponent);
+		Log.d("drawOpponent "+ raceScore.getRunner(), "time: " + duration + " percentage: " + percentageOpponent);
 		
 		float x1 = renbaan.getX(percentageOpponent, baan);
 		float y1 = renbaan.getY(percentageOpponent, baan);
@@ -149,10 +163,12 @@ public class RaceTrackView extends View {
 	private void drawPlayer(Canvas canvas) {
 		
 		
-		float x = renbaan.getX(percentagePlayer, RenBaanBaan.MIDDENBAAN);
-		float y = renbaan.getY(percentagePlayer, RenBaanBaan.MIDDENBAAN);
+		float x = renbaan.getX(percentagePlayer, RaceTrackLaneShape.MIDDENBAAN);
+		float y = renbaan.getY(percentagePlayer, RaceTrackLaneShape.MIDDENBAAN);
 		
 		canvas.drawCircle(x, y, 7, getPaint(Color.BLUE));
+		
+		//drawOpponent(canvas, playerRaceScore, Color.BLUE, RenBaanBaan.MIDDENBAAN);
 	}
 
 	private void drawBackGround(Canvas canvas) {
@@ -186,16 +202,36 @@ public class RaceTrackView extends View {
 		
 		Integer scoreTime = (int) (System.currentTimeMillis() - sumStartTime);
 
-		Log.d("elise","currentScore: " + scoreTime);
 		
-	
-		Score score = new Score(currentRace,currentSom,scoreTime);
+		int somIndex = 0;
+		
+		if(currentSom != null){//TODO ugly
+			somIndex = currentRace.getSommen().indexOf(currentSom) + 1;
+		}
 		
 		
-		player.addScore(score);
+		if(somIndex < currentRace.getSommen().size()){
 		
+		currentSom = currentRace.getSommen().get(somIndex);
+		
+		playerRaceScore.addScore(currentSom, scoreTime);
+	    
 		sumStartTime = System.currentTimeMillis();
-	
+		
+		}else{
+			//TODO finish
+		}
+		
+	}
+
+	public  String getSomStr() {
+		
+		return currentSom.getSomString();
+	}
+
+	public void startRace() {
+		started = true;
+		raceStartTime = System.currentTimeMillis();
 		
 	}
 
