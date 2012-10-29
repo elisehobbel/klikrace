@@ -1,8 +1,6 @@
 package com.elise.klikrace;
 
 
-import com.example.klikrace.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,14 +8,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.example.klikrace.R;
+
 public class KlikRaceActivity extends Activity  {
 
-    private Button startButton;
-    
+    private Button raceButton;
 	private RaceTrackView raceTrackView;
-
 	private OnClickListener myKlikListener;
-
 	private OnClickListener myStartListener;
 
 	@Override
@@ -27,11 +24,11 @@ public class KlikRaceActivity extends Activity  {
         
         initOnClickListeners();
         
-    	startButton = (Button) findViewById(R.id.button1);
-		startButton.setText("Start");
+    	raceButton = (Button) findViewById(R.id.button1);
+		raceButton.setText("Start");
 		
 		
-		startButton.setOnClickListener(myStartListener);	
+		raceButton.setOnClickListener(myStartListener);	
 		
 		raceTrackView = new RaceTrackView(this);
 		
@@ -39,10 +36,8 @@ public class KlikRaceActivity extends Activity  {
 
 		layout.addView(raceTrackView);
 
-		startButton.bringToFront();
-		
-	
-		
+		raceButton.bringToFront();
+			
     }
 
 
@@ -51,8 +46,8 @@ public class KlikRaceActivity extends Activity  {
 		myKlikListener = new OnClickListener() {
 				
 				public void onClick(View v) {
-					
-					
+					raceTrackView.checkSum();
+					raceButton.setText(raceTrackView.getSumStr());			
 				}
 			};
 			
@@ -60,10 +55,10 @@ public class KlikRaceActivity extends Activity  {
 				
 				public void onClick(View v) {
 					
-					raceTrackView.startRace();
+					raceTrackView.startRace();					
+					raceButton.setOnClickListener(myKlikListener);
+					raceButton.setText(raceTrackView.getSumStr());
 					
-					startButton.setOnClickListener(myKlikListener);
-					startButton.setText(raceTrackView.getSomStr());
 				}
 			};
 		

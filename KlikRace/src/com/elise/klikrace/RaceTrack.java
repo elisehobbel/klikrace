@@ -2,22 +2,31 @@ package com.elise.klikrace;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+
+import android.util.Log;
 
 public class RaceTrack {
 
-	private ArrayList<Sum> sommen;
-	private HashSet<RaceScore> raceScores; // TODO has no order, so no arraylsit
+	private ArrayList<Sum> sums;
+	private HashSet<RaceScore> raceScores;
+	private Sum currentSum;
+	private Iterator<Sum> sumIterator;
+	
 	
 	public RaceTrack(ArrayList<Sum> sommen) {
-		this.sommen = sommen;
+		
+		this.sums = sommen;
 		this.raceScores = new HashSet<RaceScore>();
+		this.sumIterator = sums.iterator();
+		this.currentSum = sumIterator.next();
 	}
 
 	public ArrayList<Sum> getSommen() {
-		return sommen;
+		return sums;
 	}
 
-	public HashSet<RaceScore> getRaceScores() {
+	public HashSet<RaceScore> getRaceScores() {	
 		return raceScores;	
 	}
 
@@ -40,6 +49,19 @@ public class RaceTrack {
 		
 		return raceScoreValue;
 		
+	}
+
+	public Sum getCurrentSum() {		
+		return currentSum;
+	}
+
+	public boolean hasNextSum() {
+		return sumIterator.hasNext();
+	}
+	
+	public void nextSum() { //TODO UGLY
+		currentSum = sumIterator.next();
+		Log.d("currentSum", currentSum.getSomString());
 	}
 	
 }

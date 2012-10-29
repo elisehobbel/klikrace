@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
-
 public class RaceScore {
 	
 	
@@ -18,8 +16,6 @@ public class RaceScore {
 	private Map<Sum, Integer> scores;
 
 	public RaceScore(RaceTrack race, Runner runner) {
-		super();
-		
 		this.race = race;
 		this.runner = runner;
 		this.scores = new HashMap<Sum, Integer>();
@@ -48,18 +44,19 @@ public class RaceScore {
 
 	public float getPercentagePreviousQuestions(int msPassed) {
 		
+		if(scores.isEmpty()){
+			return 0;
+		}
+		
 		ArrayList<Sum> sommen = race.getSommen();
-		
-		int somIndex = getSomIndex(msPassed, sommen);
-		
+
+		int somIndex = getSomIndex(msPassed, sommen);		
 		float percentage = (float)somIndex/sommen.size()*100;
 	
 		return percentage;
 	}
 
 	private int getSomIndex(int msPassed, ArrayList<Sum> sommen) {
-		
-		
 		
 		if(scores.size() == 0 || scores == null){
 			throw new RuntimeException("there are no scores for runner: " + runner.getName());
@@ -70,7 +67,7 @@ public class RaceScore {
 		int somIndex = 0;
 		
 		for(Sum som :sommen){
-			int somTime = scores.get(som);
+			Integer somTime = scores.get(som);
 			
 			cummulative += somTime;
 			if(msPassed > cummulative){

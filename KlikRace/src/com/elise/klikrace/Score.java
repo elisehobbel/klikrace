@@ -4,7 +4,6 @@ import java.util.Date;
 
 
 public class Score {
-	//this is a struct
 	
 	private RaceTrack race;
 	private long time;
