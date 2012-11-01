@@ -35,16 +35,10 @@ public class RaceTrackView extends View {
 	public RaceTrackView(Context context) {
 		
 		super(context);
-		backgroundRect = new Rect(0,0,0,0);
-		raceTrackShape = new RaceTrackShape();
-		raceTrackShape.setBaanBreedte(20);
-		raceTrackShape.setBinnenStraal(80);
-
-		//dummy data
-		ArrayList<Sum> sommen = new ArrayList<Sum>();
-		sommen.add(new Sum("1+8"));
-		sommen.add(new Sum("4+3"));
-		sommen.add(new Sum("2+3"));
+		
+		initGraphicalObjects();
+		
+		ArrayList<Sum> sommen = createDummySums();
 		
 		currentRace = new RaceTrack(sommen);
 		player = new Runner( "player");
@@ -66,6 +60,22 @@ public class RaceTrackView extends View {
 			
 		percentagePlayer = 0;
 		
+	}
+
+	private void initGraphicalObjects() {
+		//in Android resources are limited thats why I create here
+		backgroundRect = new Rect(0,0,0,0);
+		raceTrackShape = new RaceTrackShape();
+		raceTrackShape.setBaanBreedte(20);
+		raceTrackShape.setBinnenStraal(80);
+	}
+
+	private ArrayList<Sum> createDummySums() {
+		ArrayList<Sum> sommen = new ArrayList<Sum>();
+		sommen.add(new Sum("1+8"));
+		sommen.add(new Sum("4+3"));
+		sommen.add(new Sum("2+3"));
+		return sommen;
 	}
 	
 	@Override
@@ -195,13 +205,15 @@ public class RaceTrackView extends View {
 			currentRace.nextSum();
 		}else{
 			started = false;
-			// TODO finished
+		
 		}	
 	}
 
+	
+
 	private void increasePercentagePlayer() {
 		percentagePlayer += 100.0/currentRace.getSommen().size();
-	}
+	}	
 
 	public  String getSumStr() {	
 		if(started == false){//TODO ugly next screen needs to b shown

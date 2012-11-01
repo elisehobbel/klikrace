@@ -5,5 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_klik_race">KlikRaceActivity</string>
     <string name="klik">klik</string>
+    <string name="winner">"the winner is... "</string>
+    <string name="winnerStr">and the winner is...</string>
 
 </resources>

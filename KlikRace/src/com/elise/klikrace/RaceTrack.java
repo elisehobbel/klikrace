@@ -14,8 +14,7 @@ public class RaceTrack {
 	private Iterator<Sum> sumIterator;
 	
 	
-	public RaceTrack(ArrayList<Sum> sommen) {
-		
+	public RaceTrack(ArrayList<Sum> sommen) {		
 		this.sums = sommen;
 		this.raceScores = new HashSet<RaceScore>();
 		this.sumIterator = sums.iterator();

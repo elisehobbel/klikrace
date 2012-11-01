@@ -2,6 +2,7 @@ package com.elise.klikrace;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,6 @@ public class KlikRaceActivity extends Activity  {
     	raceButton = (Button) findViewById(R.id.button1);
 		raceButton.setText("Start");
 		
-		
 		raceButton.setOnClickListener(myStartListener);	
 		
 		raceTrackView = new RaceTrackView(this);
@@ -46,6 +46,11 @@ public class KlikRaceActivity extends Activity  {
 		myKlikListener = new OnClickListener() {
 				
 				public void onClick(View v) {
+					
+					if(raceButton.getText().equals("done")){
+						showScore();  //hack TODO remove
+					};
+					
 					raceTrackView.checkSum();
 					raceButton.setText(raceTrackView.getSumStr());			
 				}
@@ -55,14 +60,27 @@ public class KlikRaceActivity extends Activity  {
 				
 				public void onClick(View v) {
 					
+					
 					raceTrackView.startRace();					
 					raceButton.setOnClickListener(myKlikListener);
 					raceButton.setText(raceTrackView.getSumStr());
+					
+					startService(new Intent(KlikRaceActivity.this,RaceService.class));
+					
 					
 				}
 			};
 		
 	}
+
+
+	protected void showScore() {
+		
+		Intent showScores = new Intent(this, ScoreActivity.class);
+		startActivity(showScores);
+		
+	}
+	
 
 
 }

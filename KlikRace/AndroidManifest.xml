@@ -13,13 +13,15 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.elise.klikrace.KlikRaceActivity"
-            android:label="@string/title_activity_klik_race" >
+            android:label="@string/title_activity_klik_race" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.elise.klikrace.ScoreActivity" android:screenOrientation="landscape"></activity>
+        <service android:name="com.elise.klikrace.RaceService"></service>
     </application>
 
 </manifest>
