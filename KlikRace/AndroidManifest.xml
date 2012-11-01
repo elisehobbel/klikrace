@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.elise.klikrace.KlikRaceActivity"
-            android:label="@string/title_activity_klik_race" android:screenOrientation="landscape">
+            android:label="@string/title_activity_klik_race" android:screenOrientation="landscape" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

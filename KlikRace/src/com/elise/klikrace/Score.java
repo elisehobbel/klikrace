@@ -5,12 +5,12 @@ import java.util.Date;
 
 public class Score {
 	
-	private RaceTrack race;
+	private Race race;
 	private long time;
 	private Sum som;
 	private Date momentPlayed;
 	
-	public Score(RaceTrack race, Sum som, long time) {
+	public Score(Race race, Sum som, long time) {
 		this.race = race;
 		this.som = som;
 		this.time = time;
@@ -18,7 +18,7 @@ public class Score {
 		
 	}
 
-	public RaceTrack getRace() {
+	public Race getRace() {
 		return race;
 	}
 

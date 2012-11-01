@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RaceScore {
+public class RaceScore implements Comparable<RaceScore>{
 	
-	
-	private RaceTrack race;
+	private Race race;
 	
 	private Runner runner;
 	
@@ -15,13 +14,13 @@ public class RaceScore {
 	
 	private Map<Sum, Integer> scores;
 
-	public RaceScore(RaceTrack race, Runner runner) {
+	public RaceScore(Race race, Runner runner) {
 		this.race = race;
 		this.runner = runner;
 		this.scores = new HashMap<Sum, Integer>();
 	}
 
-	public RaceTrack getRace() {
+	public Race getRace() {
 		return race;
 	}
 
@@ -56,7 +55,7 @@ public class RaceScore {
 		return percentage;
 	}
 
-	private int getSomIndex(int msPassed, ArrayList<Sum> sommen) {
+	private int getSomIndex(long msPassed, ArrayList<Sum> sommen) {
 		
 		if(scores.size() == 0 || scores == null){
 			throw new RuntimeException("there are no scores for runner: " + runner.getName());
@@ -89,8 +88,8 @@ public class RaceScore {
 		return  getPercentagePreviousQuestions(msPassed) + getPercentageCurrentQuestion(msPassed)/race.getSommen().size();
 	}
 
-	public float getPercentageCurrentQuestion(int msPassed) {
-		int totalScore = getTotalScore();
+	public float getPercentageCurrentQuestion(long msPassed) {
+		long totalScore = getTotalScore();
 		
 		if(msPassed > totalScore){
 			msPassed = totalScore;
@@ -103,14 +102,14 @@ public class RaceScore {
 		Sum currentSom = race.getSommen().get(somIndex);
 		int scoreCurrentSom = scores.get(currentSom);
 		int timePreviousSommen = getTimePreviousSommen(somIndex);
-		int timeInCurrentSom = msPassed - timePreviousSommen;
+		long timeInCurrentSom = msPassed - timePreviousSommen;
 
 		float percentageInCurrent = (float)timeInCurrentSom/(float)scoreCurrentSom* 100;	
 		return  percentageInCurrent;
 	}
 
-	private int getTotalScore() {
-		int total = 0;
+	public long getTotalScore() {
+		long total = 0;
 		for(Integer val:scores.values()){
 			total += val;
 		}
@@ -126,6 +125,26 @@ public class RaceScore {
 		}
 		
 		return total;
+	}
+
+	public int compareTo(RaceScore another) {
+		if(another.getTotalScore() < this.getTotalScore()){
+			return 1;
+					
+		}else {
+			return 0;
+		}
+		
+	}
+
+	static RaceScore createDummyRaceScore(Race race, Runner runner, int time1,int time2,  int time3) {
+		
+		RaceScore raceScore = new RaceScore(race, runner);
+		raceScore.addScore(race.getSommen().get(0), time1);
+		raceScore.addScore(race.getSommen().get(1), time2);
+		raceScore.addScore(race.getSommen().get(2), time3);
+		
+		return raceScore;
 	}
 	
 	

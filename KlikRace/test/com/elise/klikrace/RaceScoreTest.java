@@ -11,7 +11,7 @@ public class RaceScoreTest {
 
 	private float delta = 0.1F;
 	private Runner runner1;
-	private RaceTrack race;
+	private Race race;
 	private RaceScore raceScore;
 
 	@Before
@@ -22,7 +22,7 @@ public class RaceScoreTest {
 		
 		sommen.add(som1);
 		sommen.add(som2);
-		race = new RaceTrack(sommen);
+		race = new Race(sommen);
 		runner1 = new Runner("TestRunner");
 		raceScore = new RaceScore(race, runner1);
 		raceScore.addScore(som1, 2000);
@@ -44,6 +44,13 @@ public class RaceScoreTest {
 	public void testGetTrackPercentage() {
 		assertEquals(75, raceScore.getTrackPercentage(3000),delta);	
 	}
+	
+	@Test
+	public void testGetTotal() {
+		assertEquals(4000, raceScore.getTotalScore());	
+	}	
+	
+	
 
 	
 }

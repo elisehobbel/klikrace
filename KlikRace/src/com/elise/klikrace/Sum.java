@@ -11,9 +11,6 @@ public class Sum {
 		this.sumString = sumString;
 	}
 
-	public String getSomString() {
-		return sumString;
-	}
 	
 	private boolean validate(){		
 		//TODO implement
@@ -23,11 +20,16 @@ public class Sum {
 	@Override
 	public boolean equals(Object o) {
 		if(o instanceof Sum){
-			if(((Sum)o).getSomString().equals(sumString)){
+			if(((Sum)o).toString().equals(sumString)){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return sumString;
 	}
 	
 }

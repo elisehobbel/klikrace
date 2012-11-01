@@ -1,7 +1,5 @@
 package com.elise.klikrace;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,19 +15,17 @@ public class RaceTrackView extends View {
 	private Rect backgroundRect;
 	private RaceTrackShape raceTrackShape;
 	
-	private RaceScore raceScoreOpponent1;
-	private RaceScore raceScoreOpponent2;
-	
 	private long raceStartTime;
 	private Runner player;
 	private long sumStartTime;
 
 	private float percentagePlayer;
 	
-	private RaceTrack currentRace;
+	private Race currentRace;
 	private RaceScore playerRaceScore;
 	
 	private boolean started = false;
+	
 	
 	
 	public RaceTrackView(Context context) {
@@ -38,53 +34,34 @@ public class RaceTrackView extends View {
 		
 		initGraphicalObjects();
 		
-		ArrayList<Sum> sommen = createDummySums();
+		currentRace = Race.createDummyRace();  //TODO get race from service
 		
-		currentRace = new RaceTrack(sommen);
 		player = new Runner( "player");
 		
 		playerRaceScore = new RaceScore(currentRace, player);
-		
-		Runner opponent1 = new Runner("opponent1");		
-		Runner opponent2 = new Runner("opponent2");
-		
-		raceScoreOpponent1 = new RaceScore(currentRace, opponent1);
-		raceScoreOpponent1.addScore(currentRace.getSommen().get(0), 3333);
-		raceScoreOpponent1.addScore(currentRace.getSommen().get(1), 3333);
-		raceScoreOpponent1.addScore(currentRace.getSommen().get(2), 3333);
-		
-		raceScoreOpponent2 = new RaceScore(currentRace, opponent2);
-		raceScoreOpponent2.addScore(currentRace.getSommen().get(0), 4444);
-		raceScoreOpponent2.addScore(currentRace.getSommen().get(1), 3333);
-		raceScoreOpponent2.addScore(currentRace.getSommen().get(2), 1111);
 			
 		percentagePlayer = 0;
 		
 	}
 
+
+
 	private void initGraphicalObjects() {
-		//in Android resources are limited thats why I create here
+		//in Android resources are limited thats why I do it  here
 		backgroundRect = new Rect(0,0,0,0);
 		raceTrackShape = new RaceTrackShape();
 		raceTrackShape.setBaanBreedte(20);
 		raceTrackShape.setBinnenStraal(80);
 	}
 
-	private ArrayList<Sum> createDummySums() {
-		ArrayList<Sum> sommen = new ArrayList<Sum>();
-		sommen.add(new Sum("1+8"));
-		sommen.add(new Sum("4+3"));
-		sommen.add(new Sum("2+3"));
-		return sommen;
-	}
+
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
 		super.onDraw(canvas);
-	 
+
 		drawBackGround(canvas);
-		
 		drawTrack(canvas);
 			
 		raceTrackShape.setWidth(canvas.getWidth());
@@ -134,13 +111,16 @@ public class RaceTrackView extends View {
 	
 	
 	private void drawOpponent1(Canvas canvas) {
+		
 		int color = Color.RED;	
-		drawOpponent(canvas, raceScoreOpponent1, color, RaceTrackLane.BUITENBAAN);	
+		drawOpponent(canvas, currentRace.getRaceScoreFastestOpponent(), color, RaceTrackLane.BUITENBAAN);	
+		
 	}
 	
 	private void drawOpponent2(Canvas canvas) {
+		
 		int color = Color.GREEN;
-		drawOpponent(canvas, raceScoreOpponent2, color, RaceTrackLane.BINNENBAAN);
+		drawOpponent(canvas, currentRace.getRaceScoreSecondFastestOpponent(), color, RaceTrackLane.BINNENBAAN);
 	}
 	
 	
@@ -219,7 +199,7 @@ public class RaceTrackView extends View {
 		if(started == false){//TODO ugly next screen needs to b shown
 			return "done";
 		}
-		return currentRace.getCurrentSum().getSomString();
+		return currentRace.getCurrentSum().toString();
 	}
 
 	public void startRace() {

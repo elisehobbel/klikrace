@@ -37,6 +37,10 @@ public class KlikRaceActivity extends Activity  {
 		layout.addView(raceTrackView);
 
 		raceButton.bringToFront();
+		
+		startService(new Intent(KlikRaceActivity.this,RaceService.class));
+		
+		
 			
     }
 
@@ -65,7 +69,7 @@ public class KlikRaceActivity extends Activity  {
 					raceButton.setOnClickListener(myKlikListener);
 					raceButton.setText(raceTrackView.getSumStr());
 					
-					startService(new Intent(KlikRaceActivity.this,RaceService.class));
+				
 					
 					
 				}
